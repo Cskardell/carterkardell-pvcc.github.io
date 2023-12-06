@@ -1,33 +1,34 @@
 # Name: Carter Kardell
 # Prog Purpose: This program creates a payroll report
 import datetime
+from email import feedparser
 from traceback import print_tb
 ############## LISTS of data ############
 emp = [
-"Smith, James ",
-"Johnson, Patricia",
-"Williams, John ",
-"Brown, Michael ",
-"Jones, Elizabeth ",
-"Garcia, Brian ",
-"Miller, Deborah ",
-"Davis, Timothy ",
-"Rodriguez, Ronald",
-"Martinez, Karen ",
-"Hernandez, Lisa ",
-"Lopez, Nancy ",
-"Gonzales, Betty ",
-"Wilson, Sandra ",
-"Anderson, Margie ",
-"Thomas, Daniel ",
-"Taylor, Steven ",
-"Moore, Andrew ",
-"Jackson, Donna ",
-"Martin, Yolanda ",
-"Lee, Carolina ",
-"Perez, Kevin ",
-"Thompson, Brian ",
-"White, Deborah ",]
+"Smith, James     ",
+"Johnson, Patricia ",
+"Williams, John    ",
+"Brown, Michael    ",
+"Jones, Elizabeth  ",
+"Garcia, Brian     ",
+"Miller, Deborah   ",
+"Davis, Timothy    ",
+"Rodriguez, Ronald ",
+"Martinez, Karen   ",
+"Hernandez, Lisa   ",
+"Lopez, Nancy      ",
+"Gonzales, Betty   ",
+"Wilson, Sandra    ",
+"Anderson, Margie  ",
+"Thomas, Daniel    ",
+"Taylor, Steven    ",
+"Moore, Andrew     ",
+"Jackson, Donna    ",
+"Martin, Yolanda   ",
+"Lee, Carolina     ",
+"Perez, Kevin      ",
+"Thompson, Brian   ",
+"White, Deborah    ",]
 job = ["C", "S", "J", "M", "C", "C", "C", "C", "S", "M", "C", "S",
 "C", "C", "S", "C", "C", "M", "J", "S", "S", "C", "S", "M",]
 hours = [37, 29, 32, 20, 24, 34, 28, 23, 35, 39, 36, 29, 26, 38,
@@ -47,7 +48,7 @@ total_net=0
 
 ###### TUPLES of Constants ######
 #           C     S     J      M 
-PAY_RATE= (16.50,15.75,15.75,19.30)
+PAY_RATE= (16.50,15.75,15.75,19.50)
 
 #         fed  st   ss  med   rt
 DED_RATE=(.12,.03,.062,.0145,.04)
@@ -92,7 +93,7 @@ def perform_calculations():
         net_pay.append(net)
 def display_results():
     currency = '8.2f'
-    line = '____________________'
+    line = '__________________________________________________________________________________________________________________'
     tab = "\t"
 
     print(line)
@@ -101,14 +102,23 @@ def display_results():
     print(tab + str(datetime.datetime.now()))
     print(line)
     titles1 = "EMP NAME" + tab + "CODE" + tab + "GROSS" + tab
-    titles2 = "FED INC TAX" + tab + "STATE INC TAX" + tab + "SOC SEC" + tab + "MEDICARE" + tab + "NET"
+    titles2 = (  "FED INC TAX" + tab + "STATE INC TAX" + tab + "SOC SEC"
+        + tab + "MEDICARE" + tab + "NET")
     print(titles1 + titles2)
+ 
 
     for i in range(num_emps):
-        data = emp[i] + " " + job[i] + format(gross_pay[i], currency)
-        print (data)
-        print(line)
-        print("*************** TOTAL GROSS: $" + format(total_gross, currency))
-        print("*************** TOTAL NET: $" + format(total_net, currency))
-        print(line)
+        data = emp[i] + job[i] + format(gross_pay[i], currency) +tab
+        data += format(fed_tax[i], currency) +tab  + format(state_tax[i], currency) +tab
+        data += format(soc_sec[i], currency)  +tab + format(medicare[i], currency) +tab
+        data += format(net_pay[i], currency)+tab
+
+        print(data)
+
+
+    # Move these outside of the loop
+    print("*************** TOTAL GROSS: $" + format(total_gross, currency))
+    print("*************** TOTAL NET: $" + format(total_net, currency))
+    print(line)
+
 main()
